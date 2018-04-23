@@ -1,3 +1,6 @@
+/*
+    Primeira implmentacao do CPLEX feito em aula para o problema de soja e milho.
+*/
 package cplex;
 
 import ilog.concert.IloException;

@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+    Problemas dos minerais (knapsack) com mais de um container.
  */
 package cplex;
 
@@ -30,19 +28,20 @@ public class Minerio_Containers {
     }
 
     public Minerio_Containers() throws IloException, FileNotFoundException, IOException, IOException {
-
+        
+        /*--------------|Parâmetros|--------------*/
         int n = 100;
         int limitePeso = 500;
         int limiteVolume = 70;
         int limiteItens = 5;
         int bags = 3;
+        String arquivoCSV = "instancia_p1.csv";
 
         double[] item = new double[n];
         double[] valor = new double[n];
         double[] peso = new double[n];
         double[] volume = new double[n];
 
-        String arquivoCSV = "instancia_p1.csv";
         BufferedReader br = null;
         String linha = "";
         String csvDivisor = ",";

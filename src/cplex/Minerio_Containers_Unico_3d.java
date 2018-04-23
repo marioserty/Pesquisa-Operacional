@@ -1,6 +1,7 @@
 /*
     Problema dos mineirais (knapsack) com mais de um container e com 
     restrição de que não pode haver o mesmo item em containers diferentes
+    e usando matrix tridimensional.
  */
 package cplex;
 
@@ -22,19 +23,19 @@ import ilog.cplex.IloCplex;
  *
  * @author mario
  */
-public class Minerio_Containers_Unico {
+public class Minerio_Containers_Unico_3d {
 
     public static void main(String[] args) throws IloException, IOException {
         new Minerio_Containers_Unico();
     }
 
-    public Minerio_Containers_Unico() throws IloException, FileNotFoundException, IOException, IOException {
+    public Minerio_Containers_Unico_3d() throws IloException, FileNotFoundException, IOException, IOException {
         /*-----------------|Parâmetros|---------------*/
-        int n = 100;
+        int n = 100;            //Número de itens
         int limitePeso = 500;
         int limiteVolume = 70;
         int limiteItens = 5;
-        int bags = 3;
+        int bags = 3;           //Containers
         String arquivoCSV = "instancia_p1.csv";
 
         double[] item = new double[n];
@@ -61,18 +62,12 @@ public class Minerio_Containers_Unico {
 
         /*--------------|Variáveis de Decisão|--------------*/
         //Itens:
-        IloIntVar[][] x = new IloIntVar[n][bags];
+        IloIntVar[][][] x = new IloIntVar[n][bags][limiteItens];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < bags; j++) {
-                x[i][j] = model.intVar(0, limiteItens);
-            }
-        }
-        
-        //0-1 y:
-        IloIntVar[][] y = new IloIntVar[n][bags];
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < bags; j++){
-                y[i][j] = model.intVar(0, 1);
+                for (int k = 0; k < limiteItens; k++) {                    
+                    x[i][j][k] = model.intVar(0, 1);
+                }
             }
         }
         
@@ -115,7 +110,7 @@ public class Minerio_Containers_Unico {
         }
         
         
-        //Restricao y <= 1
+        //Restricao y <= 1:
         for (int i = 0; i < n; i++) {
             IloLinearNumExpr restricaoY = model.linearNumExpr();
             for (int j = 0; j < bags; j++) {
@@ -124,7 +119,7 @@ public class Minerio_Containers_Unico {
             model.addLe(restricaoY, 1);
         }
         
-        //x[i][c] <= M*y[i][c]
+        //x[i][c] <= M*y[i][c]:
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < bags; j++) {
                 IloLinearNumExpr restricaoExp1 = model.linearNumExpr();
